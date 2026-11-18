@@ -1,0 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&display=swap');
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  font-family: 'Prompt', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  background: #07070d;
+  color: #ecedf6;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection { background: #7c5cff; color: #fff; }
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: #07070d; }
+::-webkit-scrollbar-thumb { background: #2a2a44; border-radius: 10px; }

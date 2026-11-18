@@ -1,0 +1,144 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Mali:wght@500;700&display=swap');
+
+/* =========================================================
+   1) ฉาก Pixel ด้านล่างเว็บ
+   ========================================================= */
+.px-scene {
+  --u: 5px; /* ขนาด 1 พิกเซลของสไปรต์ */
+  position: relative;
+  z-index: 2;
+  height: 340px;
+  margin-top: 96px;
+  overflow: hidden;
+}
+.px-scene svg { width: calc(var(--w) * var(--u)); height: calc(var(--h) * var(--u)); display: block; }
+
+/* พื้นหญ้าเอียงแบบ 3 มิติ (กล้องมองเฉียงเหมือนเกม Pokémon) */
+.px-world { position: absolute; inset: 0; perspective: 520px; perspective-origin: 50% 0; }
+.px-ground {
+  position: absolute; left: -25%; right: -25%; bottom: -70px; height: 400px;
+  transform-origin: 50% 100%; transform: rotateX(62deg);
+  background: conic-gradient(#2a6247 25%, #1f4d38 0 50%, #2a6247 0 75%, #1f4d38 0) 0 0 / 96px 96px;
+  box-shadow: inset 0 140px 100px -30px #0b1020;
+}
+.px-ground::after { /* ทางเดินดิน */
+  content: ''; position: absolute; left: 0; right: 0; top: 52%; height: 24%;
+  background: conic-gradient(#c9a66b 25%, #b8945a 0 50%, #c9a66b 0 75%, #b8945a 0) 0 0 / 96px 96px;
+  opacity: 0.85;
+}
+
+.px-deco { position: absolute; transform-origin: 50% 100%; pointer-events: none; }
+.px-deco.glow::before {
+  content: ''; position: absolute; left: 50%; top: -6px; width: 150px; height: 150px; translate: -50% 0;
+  background: radial-gradient(circle, #fde68a66, #fde68a00 65%); animation: px-pulse 3s ease-in-out infinite;
+}
+.px-sign {
+  position: absolute; left: 50%; top: 6px; translate: -50% 0; white-space: nowrap;
+  font: 7px/1 'Press Start 2P', monospace; color: #fff; text-shadow: 1px 1px #1a1428;
+}
+
+/* ตัวละคร */
+.px-char {
+  position: absolute; left: 0; bottom: 60px; padding: 0; border: 0; background: none; cursor: pointer;
+  width: calc(12 * var(--u)); height: calc(16 * var(--u)); transform-origin: 50% 100%;
+}
+.px-char:focus-visible { outline: 2px dashed #facc15; outline-offset: 6px; }
+.px-spr { position: relative; display: block; width: 100%; height: 100%; }
+.px-spr svg { position: absolute; left: 0; top: 0; }
+.px-char[data-face='l'] .px-spr { scale: -1 1; }
+.px-shadow {
+  position: absolute; left: 10%; right: 10%; bottom: -4px; height: 10px; border-radius: 50%;
+  background: #0009; filter: blur(2px);
+}
+.f-a, .f-b { display: none !important; }
+.px-char[data-mv='walk'] .f-i { display: none; }
+.px-char[data-mv='walk'] .f-a { display: block !important; animation: px-a 0.44s steps(1) infinite; }
+.px-char[data-mv='walk'] .f-b { display: block !important; animation: px-b 0.44s steps(1) infinite; }
+.px-char[data-mv='walk'] .px-spr { animation: px-bob 0.22s steps(2) infinite; }
+.px-char:hover .px-spr { animation: px-hop 0.4s ease-out; }
+
+.px-emote { position: absolute; left: 50%; bottom: 100%; translate: -50% -4px; --u: 3px; animation: px-float 1.6s ease-in-out infinite; }
+.px-tag {
+  position: absolute; left: 50%; bottom: calc(100% + 34px); translate: -50% 0; opacity: 0; transition: opacity 0.15s;
+  font: 8px/1 'Press Start 2P', monospace; white-space: nowrap; padding: 5px 7px;
+  color: #202030; background: #fbfbf4; border: 2px solid #202030; border-radius: 4px;
+}
+.px-char:hover .px-tag, .px-char:focus-visible .px-tag { opacity: 1; }
+
+/* กล่องข้อความสไตล์ Pokémon */
+.px-dialog {
+  position: absolute; left: 50%; bottom: 14px; translate: -50% 0; z-index: 300;
+  width: min(660px, calc(100% - 24px)); min-height: 116px; padding: 16px 22px 20px; cursor: pointer;
+  background: #fbfbf4; color: #202030; border: 4px solid #202030; border-radius: 10px;
+  box-shadow: inset 0 0 0 3px #fff, inset 0 0 0 6px #6b7aa8, 0 8px 0 #0007;
+  font: 500 18px/1.7 'Mali', 'Sarabun', sans-serif;
+}
+.px-dialog p { margin: 6px 0 0; }
+.px-who { font: 9px/1 'Press Start 2P', monospace; color: #d93636; }
+.px-more { position: absolute; right: 18px; bottom: 10px; font-style: normal; color: #d93636; animation: px-blink 0.8s steps(2) infinite; }
+.px-hint {
+  position: absolute; left: 50%; bottom: 14px; translate: -50% 0; z-index: 200; margin: 0; white-space: nowrap;
+  font: 9px/1 'Press Start 2P', monospace; color: #fff; text-shadow: 2px 2px #1a1428; animation: px-blink 1.2s steps(2) infinite;
+}
+
+@keyframes px-a { 0% { opacity: 1; } 50% { opacity: 0; } }
+@keyframes px-b { 0% { opacity: 0; } 50% { opacity: 1; } }
+@keyframes px-bob { 50% { transform: translateY(-3px); } }
+@keyframes px-hop { 40% { transform: translateY(-14px); } }
+@keyframes px-float { 50% { transform: translateY(-5px); } }
+@keyframes px-blink { 50% { opacity: 0; } }
+@keyframes px-pulse { 50% { opacity: 0.55; } }
+
+/* =========================================================
+   2) ลูกเล่นแบบเกม Pokémon ทั้งหน้าเว็บ
+   ========================================================= */
+/* ลูกศรเลือกเมนู ▶ */
+.nav-links a:hover::before, .skill-btn.active::before, .sec-title::before {
+  content: '▶'; display: inline-block; margin-right: 0.45em; font-size: 0.6em; vertical-align: middle;
+  animation: px-blink 1s steps(2) infinite;
+}
+.sec-title::before { color: #ef4444; }
+
+/* โปเกบอลกลิ้งตามการเลื่อนหน้า (ใช้ --p ที่ App ตั้งไว้แล้ว) */
+.pk-ball {
+  position: fixed; top: 3px; z-index: 70; width: 22px; height: 22px; border-radius: 50%; pointer-events: none;
+  left: calc(var(--p, 0) * (100% - 22px)); rotate: calc(var(--p, 0) * 1440deg);
+  border: 2px solid #111; background: linear-gradient(#ef4444 44%, #111 44% 56%, #f8fafc 56%);
+  box-shadow: 0 2px 8px #0008;
+}
+.pk-ball::after {
+  content: ''; position: absolute; left: 50%; top: 50%; width: 7px; height: 7px; translate: -50% -50%;
+  border-radius: 50%; background: #f8fafc; border: 2px solid #111;
+}
+
+/* การ์ดสมาชิก = การ์ดโฮโลแกรม + เลขประจำตัว */
+.tilt { position: relative; transform-style: preserve-3d; }
+.pk-foil {
+  position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity 0.3s;
+  mix-blend-mode: color-dodge;
+  background:
+    radial-gradient(circle at var(--mx, 50%) var(--my, 50%), #ffffff99, #fff0 45%),
+    linear-gradient(115deg, #0000 20%, #ff5ea866 35%, #ffe66666 45%, #5effc866 55%, #5eb8ff66 65%, #0000 80%);
+  background-size: 100% 100%, 220% 220%;
+  background-position: 0 0, var(--mx, 50%) var(--my, 50%);
+}
+.tilt:hover .pk-foil { opacity: 0.6; }
+.pk-no { position: absolute; top: 12px; right: 14px; font: 8px/1 'Press Start 2P', monospace; opacity: 0.65; }
+
+/* ทรานซิชันเปลี่ยนฉากแบบเข้าสู่การต่อสู้ */
+.pk-wipe { position: fixed; inset: 0; z-index: 9000; pointer-events: none; display: grid; grid-template-rows: repeat(8, 1fr); }
+.pk-wipe i { background: #0b0b14; border-bottom: 2px solid #ef4444; transform: scaleX(0); transform-origin: 0 50%; }
+.pk-wipe i:nth-child(even) { transform-origin: 100% 50%; }
+.pk-wipe.on i { animation: pk-wipe 0.95s both; }
+.pk-wipe.on i:nth-child(2n) { animation-delay: 0.04s; }
+.pk-wipe.on i:nth-child(3n) { animation-delay: 0.08s; }
+@keyframes pk-wipe { 0% { transform: scaleX(0); } 42%, 58% { transform: scaleX(1); } 100% { transform: scaleX(0); } }
+
+@media (max-width: 640px) {
+  .px-scene { --u: 3.6px; height: 290px; }
+  .px-dialog { font-size: 15px; min-height: 100px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .px-scene *, .pk-ball { animation: none !important; }
+  .pk-wipe { display: none; }
+}
